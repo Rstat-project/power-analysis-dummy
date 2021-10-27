@@ -1,0 +1,56 @@
+---
+title: "Power analysis for paired samples"
+author: "My name"
+date: "2021/11/"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+crans <- c("https://cran.csie.ntu.edu.tw/","https://cran.asia/","https://cloud.r-project.org")
+if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(tidyverse)} 
+```
+
+## t檢定
+
+- 相依樣本t檢定
+
+
+```{r paired-t-test}
+
+```
+
+
+## 模擬相依樣本t檢定
+
+
+- 建立模擬函式
+
+```{r sim_t_ind}
+
+```
+
+
+- 測試模擬函式
+
+
+```{r run-sim_t_ind}
+
+```
+
+### 估計考驗力
+
+```{r reps}
+
+```
+
+- 模擬結果直方圖
+
+```{r plot-reps}
+
+```
+
