@@ -1,7 +1,7 @@
 ---
 title: "Power analysis for paired samples"
 author: "My name"
-date: "2021/11/"
+date: "2021/11/12"
 output: html_document
 ---
 
@@ -15,17 +15,44 @@ crans <- c("https://cran.csie.ntu.edu.tw/","https://cran.asia/","https://cloud.r
 if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(tidyverse)} 
 ```
 
-## t檢定
+## 相依樣本t檢定
 
-- 相依樣本t檢定
+- 匯入資料
 
+資料來源：吳佳瑾。[R語言與統計分析-快速入門](https://sites.google.com/view/quick-r-statistics/%E9%A6%96%E9%A0%81?authuser=0)
+
+```{r import}
+## 匯入真實資料
+dat <- read_csv(file = "gData1.csv")
+
+## 期中考與期末考成績描述統計
+
+dat_sum <- dat %>% summarise(n = n(),
+                  mid_mean = mean(期中考),
+                  mid_sd = sd(期中考),
+                  final_mean = mean(期末考),
+                  final_sd = sd(期末考))
+```
+
+- 
+
+
+- 比較期中考及期末考成績
 
 ```{r paired-t-test}
+## 執行t檢定
+ 
+
+#The `paired` argument defaults to `FALSE`, but it's good practice to always explicitly set it so you are never confused about what type of test you are performing.
+
+
+## 列印t檢定結果
+
 
 ```
 
 
-## 模擬相依樣本t檢定
+### 相依樣本t檢定模擬資料
 
 
 - 建立模擬函式
@@ -44,6 +71,8 @@ if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(ti
 
 ### 估計考驗力
 
+- 運用模擬資料估計考驗力
+
 ```{r reps}
 
 ```
@@ -54,3 +83,10 @@ if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(ti
 
 ```
 
+
+- 運用公式逼近
+
+
+```{r power.t.test}
+
+```

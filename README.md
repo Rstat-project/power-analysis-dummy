@@ -23,3 +23,8 @@
 ## 發問討論
 
 [github討論區](https://github.com/Rstat-project/power-analysis-dummy/discussions)提供學員發問與討論。
+
+
+## 教材來源
+
+Lisa DeBruine, & Dale Barr. (2019). Data Skills for Reproducible Science (1.0.0). Zenodo. https://doi.org/10.5281/zenodo.3564555

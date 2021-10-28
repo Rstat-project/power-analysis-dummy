@@ -1,7 +1,7 @@
 ---
 title: "Power analysis for independent samples"
 author: "Sau-Chin Chen"
-date: "2021/11/"
+date: "2021/11/12"
 output: html_document
 ---
 
@@ -38,23 +38,23 @@ a <- rnorm(100, 0.5, 1)
 b <- rnorm(100, 0.7, 1)
 ## 執行t檢定
 t_ind <- t.test(a, b, paired = FALSE)
+## The `paired` argument defaults to `FALSE`, but it's good practice to always explicitly set it so you are never confused about what type of test you are performing.
 ## 列印t檢定結果
 t_ind
 ```
 
 
-
-The `paired` argument defaults to `FALSE`, but it's good practice to always explicitly set it so you are never confused about what type of test you are performing.
-
-
-預覽t檢定函式輸出資訊
+- 預覽t檢定函式輸出資訊
 
 
 ```{r names}
 names(t_ind)
-t_ind$statistic
+t_ind$parameter
 ```
 
+- inline code 示範
+
+a組與b組的獨立樣本t檢定結果: t(`r t_ind$parameter`) = `r t_ind$statistic`, p = `r t_ind$p.value`。
 
 
 ### 獨立樣本t檢定模擬資料
@@ -87,7 +87,7 @@ sim_t_ind(100, 0.7, 1, 0.5, 1)
 
 ### 估計考驗力
 
-- 運用模擬資料估計
+- 運用模擬資料估計考驗力
 
 ```{r reps}
 my_reps <- replicate(1e4, sim_t_ind(100, 0.7, 1, 0.5, 1))
@@ -116,160 +116,3 @@ power.t.test(n = 100,
 ```
 
 
-## 真實研究案例
-
-
-[美國國民身高紀錄資料庫](https://www.cdc.gov/growthcharts/data/zscore/zstatage.csv)
-
-**Q：今天要抽樣調查，確認美國少年身高高於少女，需要找多少位美國少年與美國少女？**
-
-### 載入與整頓資料
-
-
-```{r load-height-data}
-orig_height_age <- read_csv("https://www.cdc.gov/growthcharts/data/zscore/zstatage.csv") 
-
-height_age <- orig_height_age %>%
-  filter(Sex %in% c(1,2)) %>%
-  mutate(
-    sex = recode(Sex, "1" = "male", "2" = "female"),
-    age = as.numeric(Agemos)/12,
-    sd = `1` - `0`
-  ) %>%
-  dplyr::select(sex, age, mean = `0`, sd)
-```
-
-
-### 繪圖/資料視覺化
-
-
-```{r plot-height-means}
-ggplot(height_age, aes(age, mean, color = sex)) +
-  geom_smooth(aes(ymin = mean - sd, ymax = mean + sd), stat="identity")
-```
-
-
-### 取得分組平均值及標準差
-
-
-```{r height-subset-20}
-
-height_sub <- height_age %>% filter(age == 20)
-
-m_mean <- height_sub %>% filter(sex == "male") %>% pull(mean)
-m_sd   <- height_sub %>% filter(sex == "male") %>% pull(sd)
-f_mean <- height_sub %>% filter(sex == "female") %>% pull(mean)
-f_sd   <- height_sub %>% filter(sex == "female") %>% pull(sd)
-
-height_sub
-```
-
-
-
-### 模擬資料的假設檢定函式
-
-
-```{r sim-height-20}
-
-sim_height <- tibble(
-  male = rnorm(50, m_mean, m_sd),
-  female = rnorm(50, f_mean, f_sd)
-) %>%
-  gather("sex", "height", male:female)
-
-ggplot(sim_height) +
-  geom_density(aes(height, fill = sex), alpha = 0.5) +
-  xlim(125, 225)
-
-```
-
-
-### 分析模擬資料
-
-
-```{r subset-height-14}
-height_sub <- height_age %>% filter(age == 14)
-m_mean <- height_sub %>% filter(sex == "male") %>% pull(mean)
-m_sd   <- height_sub %>% filter(sex == "male") %>% pull(sd)
-f_mean <- height_sub %>% filter(sex == "female") %>% pull(mean)
-f_sd   <- height_sub %>% filter(sex == "female") %>% pull(sd)
-
-sim_t_ind(50, m_mean, m_sd, f_mean, f_sd)
-```
-
-
-### 迭代模擬分析
-
-
-```{r rep-height-14}
-my_reps <- replicate(1e4, sim_t_ind(50, m_mean, m_sd, f_mean, f_sd))
-
-alpha <- 0.05
-power <- mean(my_reps < alpha)
-power
-
-```
-
-
-### 評估預測正確率
-
-
-```{r add-1tailed}
-sim_t_ind <- function(n, m1, sd1, m2, sd2, alternative = "two.sided") {
-  v1 <- rnorm(n, m1, sd1)
-  v2 <- rnorm(n, m2, sd2)
-  t_ind <- t.test(v1, v2, paired = FALSE, alternative = alternative)
-  
-  return(t_ind$p.value)
-}
-
-alpha <- 0.05
-my_reps <- replicate(1e4, sim_t_ind(50, m_mean, m_sd, f_mean, f_sd, "greater"))
-mean(my_reps < alpha)
-
-```
-
-
-### 圖解樣本數-考驗力曲線
-
-
-```{r range-sample-sizes}
-
-alpha <- 0.05
-power_table <- tibble(
-  n = seq(20, 100, by = 5)
-) %>%
-  mutate(power = map_dbl(n, function(n) {
-    ps <- replicate(1e3, sim_t_ind(n, m_mean, m_sd, f_mean, f_sd, "greater"))
-    mean(ps < alpha)
-  }))
-
-ggplot(power_table, aes(n, power)) +
-  geom_smooth() +
-  geom_point() +
-  geom_hline(yintercept = 0.8)
-
-```
-
-
-- 樣本數/考驗力對照表
-
-
-```{r narrow-range-sample-sizes}
-
-power_table <- tibble(
-  n = seq(50, 60)
-) %>%
-  mutate(power = map_dbl(n, function(n) {
-    ps <- replicate(1e3, sim_t_ind(n, m_mean, m_sd, f_mean, f_sd, "greater"))
-    mean(ps < alpha)
-  }))
-
-##ggplot(power_table, aes(n, power)) +
-##  geom_smooth() +
-##  geom_point() +
-##  geom_hline(yintercept = 0.8) +
-##  scale_x_continuous(breaks = sample_size)
-
-knitr::kable(power_table)
-```
