@@ -13,13 +13,17 @@ knitr::opts_chunk$set(
 )
 crans <- c("https://cran.csie.ntu.edu.tw/","https://cran.asia/","https://cloud.r-project.org")
 if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(tidyverse)} 
+if(!require(MASS)) {install.packages("tidyverse",repos = crans );library(MASS)} 
 ```
+
 
 ## 相依樣本t檢定
 
 - 匯入資料
 
 資料來源：吳佳瑾。[R語言與統計分析-快速入門](https://sites.google.com/view/quick-r-statistics/%E9%A6%96%E9%A0%81?authuser=0)
+
+
 
 ```{r import}
 ## 匯入真實資料
@@ -29,19 +33,19 @@ dat <- read_csv(file = "gData1.csv")
 
 dat_sum <- dat %>% summarise(n = n(),
                   mid_mean = mean(期中考),
-                  mid_sd = sd(期中考),
                   final_mean = mean(期末考),
-                  final_sd = sd(期末考))
+                  diff_sd = sd(`期末考`-`期中考`),
+                  r = cor(`期中考`,`期末考`))
 ```
 
-- 
 
+`r knitr::kable(dat_sum)`
 
 - 比較期中考及期末考成績
 
 ```{r paired-t-test}
 ## 執行t檢定
- 
+
 
 #The `paired` argument defaults to `FALSE`, but it's good practice to always explicitly set it so you are never confused about what type of test you are performing.
 
@@ -54,6 +58,37 @@ dat_sum <- dat %>% summarise(n = n(),
 
 ### 相依樣本t檢定模擬資料
 
+- 多變量常態分佈隨機值生成函式
+
+`mvrnorm(n,mean,sigma)`
+
+```{r mvr}
+set.seed(10)
+dat_sum <- unlist(dat_sum)
+N <- dat_sum["n"]
+mus <- dat_sum[c("mid_mean","final_mean")]
+Sigma <- matrix(nc=2, nr=2,
+                c(
+                  dat_sum["diff_sd"]^2, dat_sum["diff_sd"]^2*dat_sum["r"],
+                  dat_sum["diff_sd"]^2*dat_sum["r"], dat_sum["diff_sd"]^2
+                ))
+
+sim_samples <- mvrnorm(N, mu = mus, Sigma = Sigma, empirical = TRUE)
+colnames(sim_samples) <- c("mid","final")
+head(sim_samples)
+```
+
+
+```{r sim-sum}
+sim_sum <- as_tibble(sim_samples) %>% summarise(n = n(),
+                  mid_mean = mean(mid),
+                  final_mean = mean(final),
+                  diff_sd = sd(final-mid),
+                  r = cor(mid,final))
+```
+
+
+`r knitr::kable(sim_sum)`
 
 - 建立模擬函式
 

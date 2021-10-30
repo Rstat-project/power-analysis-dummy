@@ -17,7 +17,7 @@ if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(ti
 
 ## t檢定
 
-R 函式
+t檢定R函式
 
 `t.test(x, y, alternative, mu, paired)`
 
