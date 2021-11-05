@@ -93,7 +93,7 @@ sim_t_ind(100, 0.7, 1, 0.5, 1)
 my_reps <- replicate(1e4, sim_t_ind(100, 0.7, 1, 0.5, 1))
 
 alpha <- 0.05
-power <- mean(my_reps < alpha)
+power <- mean(my_reps <= alpha)
 power
 ```
 

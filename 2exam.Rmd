@@ -73,7 +73,7 @@ Sigma <- matrix(nc=2, nr=2,
                   dat_sum["diff_sd"]^2*dat_sum["r"], dat_sum["diff_sd"]^2
                 ))
 
-sim_samples <- mvrnorm(N, mu = mus, Sigma = Sigma, empirical = TRUE)
+sim_samples <- mvrnorm(N, mu = mus, Sigma = Sigma)
 colnames(sim_samples) <- c("mid","final")
 head(sim_samples)
 ```
@@ -92,7 +92,7 @@ sim_sum <- as_tibble(sim_samples) %>% summarise(n = n(),
 
 - 建立模擬函式
 
-```{r sim_t_ind}
+```{r sim_t_pair}
 
 ```
 
@@ -100,7 +100,7 @@ sim_sum <- as_tibble(sim_samples) %>% summarise(n = n(),
 - 測試模擬函式
 
 
-```{r run-sim_t_ind}
+```{r run-sim_t_pair}
 
 ```
 
@@ -125,3 +125,6 @@ sim_sum <- as_tibble(sim_samples) %>% summarise(n = n(),
 ```{r power.t.test}
 
 ```
+
+
+- 改變參數重覆測試
