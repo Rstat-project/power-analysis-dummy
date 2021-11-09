@@ -19,6 +19,13 @@
 4. 確認創建"0default.html"
 5. 準備上課！
 
+## 學習目標
+
+- 預先註冊必須事前評估考驗力與樣本數的關鍵
+
+Guillaume Rousselet: [Problems with small sample sizes](https://garstats.wordpress.com/2017/02/04/small-sample-sizes/)
+
+- 運用虛擬資料估計考驗力的必要性
 
 ## 發問討論
 
