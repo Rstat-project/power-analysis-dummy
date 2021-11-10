@@ -5,12 +5,24 @@ date: "2021/11/12"
 output: html_document
 ---
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+crans <- c("https://cran.csie.ntu.edu.tw/","https://cran.asia/","https://cloud.r-project.org")
+if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(tidyverse)} 
+if(!require(MASS)) {install.packages("tidyverse",repos = crans );library(MASS)} 
+```
+
 ## 真實研究案例
 
 
 [美國國民身高紀錄資料庫](https://www.cdc.gov/growthcharts/data/zscore/zstatage.csv)
 
-**Q：今天要抽樣調查，確認美國少年身高高於少女，需要找多少位美國少年與美國少女？**
+**Q：今天要抽樣調查，確認14歲的美國少年身高高於少女，需要找多少位14歲少年與少女？**
 
 ### 載入與整頓資料
 
@@ -73,8 +85,30 @@ ggplot(sim_height) +
 ```
 
 
+
 ### 分析模擬資料
 
+
+- 建立模擬函式
+
+
+```{r sim_t_ind}
+sim_t_ind <- function(n, m1, sd1, m2, sd2) {
+  # simulate v1
+  v1 <- rnorm(n, m1, sd1)
+  
+  #simulate v2
+  v2 <- rnorm(n, m2, sd2)
+    
+  # compare using an independent samples t-test
+  t_ind <- t.test(v1, v2, paired = FALSE)
+  
+  # return the p-value
+  return(t_ind$p.value)
+}
+```
+
+- 虛擬抽樣資料
 
 ```{r subset-height-14}
 height_sub <- height_age %>% filter(age == 14)
