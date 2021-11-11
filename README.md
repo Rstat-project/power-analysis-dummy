@@ -38,9 +38,11 @@ Lisa DeBruine, & Dale Barr. (2019). Data Skills for Reproducible Science (1.0.0)
 
 Sleegers, W. W. A. (2021, October 23). Simulation-based power analyses. Willem Sleegers.com. https://www.willemsleegers.com/posts/simulation-based-power-analyses/
 
+Delacre, M., Lakens, D., & Leys, C. (2017). Why Psychologists Should by Default Use Welch’s t-test Instead of Student’s t-test. International Review of Social Psychology, 30(1), 92–101. https://doi.org/10.5334/irsp.82
+
 
 Mellor, D. T., DeHaven, A. C., Pfeiffer, N., Lowrey, O., & Call, M. S. (2021, September 21). Templates of OSF Registration Forms. Retrieved from osf.io/zab38 
 
-Bowman, S. D., DeHaven, A. C., Errington, T. M., Hardwicke, T. E., Mellor, D. T., Nosek, B. A., & Soderberg, C. K. (2020, January 22). OSF Prereg Template. https://doi.org/10.31222/osf.io/epgjd (the protocol adapted by the most(?) journals)
+Bowman, S. D., DeHaven, A. C., Errington, T. M., Hardwicke, T. E., Mellor, D. T., Nosek, B. A., & Soderberg, C. K. (2020, January 22). OSF Prereg Template. https://doi.org/10.31222/osf.io/epgjd (the protocol adapted by many journals)
 
 [Latest RR journals](https://www.cos.io/initiatives/registered-reports)

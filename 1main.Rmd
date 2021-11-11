@@ -19,7 +19,7 @@ if(!require(tidyverse)) {install.packages("tidyverse",repos = crans );library(ti
 
 t檢定R函式
 
-`t.test(x, y, alternative, mu, paired)`
+`t.test(x, y, alternative, mu, paired, var.equal)`
 
 
 - 單一樣本t檢定
